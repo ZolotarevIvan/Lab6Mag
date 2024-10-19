@@ -12,6 +12,8 @@ public class Main {
         List<Track> tracks = CRUDWorker.readTrackData("SELECT * FROM track");
         System.out.println(tracks);
 
+        CRUDWorker.findShortestTracks();
+
 
     }
 }

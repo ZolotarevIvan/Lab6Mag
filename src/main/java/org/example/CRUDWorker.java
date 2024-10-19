@@ -9,9 +9,10 @@ import java.util.List;
 
 public class CRUDWorker {
 
-    private static  String INSERT_STUDENT = "INSERT INTO students(name,surname,cource_name) VALUES (?,?,?);";
-    private static  String UPDATE_STUDENT = "UPDATE students SET cource_name = ? WHERE id = ?;";
-    private static  String DELETE_STUDENT = "DELETE from students  WHERE id = ?;";
+    private static final String INSERT_STUDENT = "INSERT INTO students(name,surname,cource_name) VALUES (?,?,?);";
+    private static final String UPDATE_STUDENT = "UPDATE students SET cource_name = ? WHERE id = ?;";
+    private static final String DELETE_STUDENT = "DELETE from students  WHERE id = ?;";
+    private static final String SHORTEST_TRACK = "SELECT a.title AS album_title,t.title AS shortest_track_title,t.duration AS shortest_track_duration FROM album a JOIN track t ON a.id = t.album_id WHERE t.duration >= '250' GROUP BY a.id, t.title, t.duration HAVING t.duration = MIN(t.duration) ORDER BY a.title;";
 
     public static List<Artist> readArtistData(String query){
         List<Artist> artists = new ArrayList<>();
@@ -57,9 +58,9 @@ public class CRUDWorker {
 
     public static List<Track> readTrackData(String query){
         List<Track> tracks = new ArrayList<>();
-        try (Connection connection = DBWorker.getConnection();               //Ресурсы в скобках автоматически закроются, если что-то пойдет не так
-             PreparedStatement preparedStatement = connection.prepareStatement(query)){        //Statement - Варианты, которыми мы можем отправлять запрос
-            ResultSet resultSet = preparedStatement.executeQuery(); //Resultset хранит данные из запроса,
+        try (Connection connection = DBWorker.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()){
                 int id = resultSet.getInt("id");
@@ -75,6 +76,24 @@ public class CRUDWorker {
         }
 
         return tracks;
+    }
+
+    public static void findShortestTracks(){
+        try (Connection connection = DBWorker.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SHORTEST_TRACK)){
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                String albumTitle = resultSet.getString("album_title");
+                String shortestTrackTitle = resultSet.getString("shortest_track_title");
+                String shortestTrackDuration = resultSet.getString("shortest_track_duration");
+
+                System.out.println(albumTitle + " "+ shortestTrackTitle + " " + shortestTrackDuration );
+            }
+
+        } catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
     }
 
     /*
