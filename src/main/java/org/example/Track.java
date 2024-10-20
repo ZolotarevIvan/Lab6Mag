@@ -3,12 +3,12 @@ package org.example;
 public class Track {
     private int id;
     private String title;
-    private int duration;
+    private String duration;
     private int album_id;
 
     public  Track(){}
 
-    public Track(int id,String title,int duration,int album_id){
+    public Track(int id,String title,String duration,int album_id){
         this.id = id;
         this.title = title;
         this.duration = duration;
@@ -31,11 +31,11 @@ public class Track {
         this.title = title;
     }
 
-    public int getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 
@@ -49,6 +49,6 @@ public class Track {
 
     @Override
     public String toString(){
-        return "\n" + "{" + "id=" + id + ", "+ "название: "+title+", "+"длительность= "+duration+"сек, "+"id альбома="+album_id+"}";
+        return "\n" + "{" + "id=" + id + ", "+ "название: "+title+", "+"длительность: "+duration+" сек, "+"id альбома: "+album_id+"}";
     }
 }
