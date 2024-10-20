@@ -1,17 +1,17 @@
 package org.example;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-        //CRUDWorker.addAlbum("Трамвайные пути","Hip-hop",2);
-        System.out.println(CRUDWorker.readArtistData("select * from artist"));
-        System.out.println(CRUDWorker.readAlbumData("select * from album"));
+        CRUDAlbum.fetchAlbumAndArtist();
 
-        //CRUDWorker.addTrack("Ратататта","00:01:58",1);
-        //CRUDWorker.changeNameArtist(5,"Lady Gaga");
+        CRUDTrack.findShortestTracks();
 
-        //System.out.println(CRUDWorker.readTrackData("select * from track"));
+        System.out.println(CRUDTrack.readTrackData("select * from track"));
+
+        //System.out.println(CRUDArtist.readArtistData("select * from artist"));
+        //System.out.println(CRUDAlbum.readAlbumData("select * from album"));
+
 
     }
 }
