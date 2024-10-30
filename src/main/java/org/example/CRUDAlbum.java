@@ -11,6 +11,7 @@ public class CRUDAlbum {
 
     private static final String INSERT_ALBUM = "INSERT INTO album(title,genre,artist_id) VALUES (?,?,?);";
     private static final String DELETE_ALBUM = "DELETE from album WHERE title = ?;";
+    private static final String DELETE_ALBUM_BY_ID = "DELETE from album WHERE id = ?;";
     private static final String ALL_ALBUMS_WITH_ARTISTS = "SELECT a.title AS album_title, ar.name AS artist_name FROM Album a JOIN Artist ar ON a.artist_id = ar.id;";
     private static final String SELECT_ALBUM_ID = "SELECT id FROM Album WHERE title = ?;";
 
@@ -73,6 +74,17 @@ public class CRUDAlbum {
         try (Connection connection = DBWorker.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ALBUM)){
             preparedStatement.setString(1,title);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
+    }
+
+    public  static void deleteAlbum(int id){
+        try (Connection connection = DBWorker.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ALBUM_BY_ID)){
+            preparedStatement.setInt(1,id);
             preparedStatement.executeUpdate();
 
         } catch (SQLException throwables){

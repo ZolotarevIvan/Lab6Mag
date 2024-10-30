@@ -12,6 +12,7 @@ public class CRUDArtist {
     private static final String INSERT_ARTIST = "INSERT INTO artist(name) VALUES (?);";
     private static final String DELETE_ARTIST = "DELETE from artist WHERE name = ?;";
     private static final String SELECT_ARTIST_ID = "SELECT id FROM Artist WHERE name = ?;";
+    private static final String ALL_TRACKS_BY_ARTIST_NAME = "SELECT t.title AS track_title FROM Artist a JOIN Album al ON a.id = al.artist_id JOIN Track t ON al.id = t.album_id WHERE a.name = ?;";
 
     public static List<Artist> readArtistData(String query){
         List<Artist> artists = new ArrayList<>();
@@ -26,11 +27,29 @@ public class CRUDArtist {
                 artists.add(new Artist(id,name));
             }
 
+
         } catch (SQLException throwables){
             throwables.printStackTrace();
         }
 
         return artists;
+    }
+
+    public static List<String>  getTracksByArtist(String name){
+        List<String> tracks = new ArrayList<>();
+        try (Connection connection = DBWorker.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(ALL_TRACKS_BY_ARTIST_NAME)){
+            preparedStatement.setString(1,name);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                tracks.add(rs.getString("track_title")); // Добавляем названия треков в список
+            }
+
+        } catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
+
+        return tracks;
     }
 
     public static void addArtist(String name){
@@ -84,6 +103,8 @@ public class CRUDArtist {
             throwables.printStackTrace();
         }
     }
+
+
 
 
 }
